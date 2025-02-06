@@ -407,6 +407,24 @@ public:
             double maximum_error,
             double boundary_weight) const;
 
+    // TODO: Quadric Decimation Function With Mapping with it 
+
+    /// v1 and v2 get contracted to form v
+    typedef struct {
+        Eigen::Vector3d v, v1, v2;
+    } DecimationMapElement;
+
+    typedef struct {
+        std::shared_ptr<TriangleMesh> SimplifiedMesh;
+        std::vector<DecimationMapElement> DecimationMap;
+    } QuadricDecimationMappedReturnValue;
+
+    QuadricDecimationMappedReturnValue SimplifyQuadricDecimationMapping(
+            int target_number_of_triangles,
+            double maximum_error,
+            double boundary_weight) const;
+
+
     /// Function to select points from \p input TriangleMesh into
     /// output TriangleMesh
     /// Vertices with indices in \p indices are selected.

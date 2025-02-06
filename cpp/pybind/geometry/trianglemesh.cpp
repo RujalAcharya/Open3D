@@ -24,6 +24,20 @@ void pybind_trianglemesh_declarations(py::module &m) {
                          "and triangles represented by the indices to the "
                          "vertices. Optionally, the mesh may also contain "
                          "triangle normals, vertex normals and vertex colors.");
+
+    // Define DecimationMapElement
+    py::class_<TriangleMesh::DecimationMapElement>(m, "DecimationMapElement")
+        .def(py::init<>())
+        .def_readwrite("v", &TriangleMesh::DecimationMapElement::v)
+        .def_readwrite("v1", &TriangleMesh::DecimationMapElement::v1)
+        .def_readwrite("v2", &TriangleMesh::DecimationMapElement::v2);
+
+    // Define QuadricDecimationMappedReturnValue
+    py::class_<TriangleMesh::QuadricDecimationMappedReturnValue>(m, "QuadricDecimationMappedReturnValue")
+        .def(py::init<>())
+        .def_readwrite("SimplifiedMesh", &TriangleMesh::QuadricDecimationMappedReturnValue::SimplifiedMesh)
+        .def_readwrite("DecimationMap", &TriangleMesh::QuadricDecimationMappedReturnValue::DecimationMap);
+
 }
 void pybind_trianglemesh_definitions(py::module &m) {
     auto trianglemesh =
@@ -255,6 +269,13 @@ void pybind_trianglemesh_definitions(py::module &m) {
                  &TriangleMesh::SimplifyQuadricDecimation,
                  "Function to simplify mesh using Quadric Error Metric "
                  "Decimation by Garland and Heckbert",
+                 "target_number_of_triangles"_a,
+                 "maximum_error"_a = std::numeric_limits<double>::infinity(),
+                 "boundary_weight"_a = 1.0)
+            .def("simplify_quadric_decimation_mapping",
+                 &TriangleMesh::SimplifyQuadricDecimationMapping,
+                 "Function to simplify mesh using Quadric Error Metric "
+                 "Decimation by Garland and Heckbert with mapping",
                  "target_number_of_triangles"_a,
                  "maximum_error"_a = std::numeric_limits<double>::infinity(),
                  "boundary_weight"_a = 1.0)
